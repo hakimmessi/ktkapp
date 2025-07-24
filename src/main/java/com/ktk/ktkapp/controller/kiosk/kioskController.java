@@ -1,7 +1,7 @@
-package com.ktk.ktkapp.controller;
+package com.ktk.ktkapp.controller.kiosk;
 
 import com.ktk.ktkapp.dto.kiosk.kiosk;
-import com.ktk.ktkapp.service.kioskService;
+import com.ktk.ktkapp.service.kiosk.kioskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -18,7 +18,8 @@ public class secuConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         // Allow unauthenticated access to the endpoint i need to test
-                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/kiosk-clients/create", "api/kiosk-clients/{clientId}/link-rep/{clientRepId}").permitAll()
+                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/kiosk-clients/create", "api/kiosk-clients/{clientId}/link-rep/{clientRepId} ",
+                                "/api/kiosk-locations/add", "/api/altron-hubs/create", "/api/kiosk-types/**", "/api/kiosk-statuses/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

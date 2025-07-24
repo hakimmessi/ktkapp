@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.repos.altron;
+package com.ktk.ktkapp.repos.technician;
 
 import com.ktk.ktkapp.model.technician.altronHubModel;
 import org.springframework.data.jpa.repository.JpaRepository;

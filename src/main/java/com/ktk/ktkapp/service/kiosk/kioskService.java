@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.service;
+package com.ktk.ktkapp.service.kiosk;
 
 import com.ktk.ktkapp.dto.kiosk.kiosk;
 import com.ktk.ktkapp.model.kiosk.kioskModel;
