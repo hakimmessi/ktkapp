@@ -1,15 +1,13 @@
 package com.ktk.ktkapp.dto.user;
 
 
-import com.fasterxml.jackson.annotation.*;
 import com.ktk.ktkapp.dto.role.kioskClientRep;
 import com.ktk.ktkapp.dto.role.kioskCustodian;
-import com.ktk.ktkapp.dto.role.ktkEmployee;
+import com.ktk.ktkapp.dto.role.ktkUser;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -43,6 +41,6 @@ public class userCreate {
     private List<String> roles; // e.g. ["KTK_USER", "KIOSK_CLIENT"]
 
     private kioskClientRep kioskClientRepProfile;
-    private ktkEmployee ktkUser;
+    private ktkUser ktkUser;
     private kioskCustodian kioskCustodianProfile;
 }

@@ -1,11 +1,9 @@
-package com.ktk.ktkapp.dto.user;
+package com.ktk.ktkapp.dto.responses.users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.http.ResponseEntity;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * DTO for login response with user info and roles

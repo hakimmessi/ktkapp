@@ -1,6 +1,8 @@
 package com.ktk.ktkapp.service;
 
 import com.ktk.ktkapp.dto.user.*;
+import com.ktk.ktkapp.dto.responses.users.userLoginResponse;
+import com.ktk.ktkapp.dto.responses.users.userResponse;
 import com.ktk.ktkapp.model.role.roleModel;
 import com.ktk.ktkapp.model.user.userModel;
 import com.ktk.ktkapp.repos.user.roleRepository;

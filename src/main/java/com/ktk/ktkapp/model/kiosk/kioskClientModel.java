@@ -19,7 +19,7 @@ public class kioskClientModel {
     private Long clientId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_rep_id", nullable = false, unique = true)
+    @JoinColumn(name = "client_rep_id", unique = true)
     private kioskClientRepModel clientRep;
 
     @Column(name = "client_name", length = 100)
@@ -49,6 +49,4 @@ public class kioskClientModel {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @PreUpdate
-    void touchUpdatedAt() { updatedAt = LocalDateTime.now(); }
 }

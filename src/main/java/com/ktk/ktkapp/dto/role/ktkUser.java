@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ktkEmployee {
+public class ktkUser {
     @Size(max = 100, message = "Department must not exceed 100 characters")
     private String department;
 }

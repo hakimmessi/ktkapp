@@ -2,10 +2,10 @@ package com.ktk.ktkapp.service;
 
 import com.ktk.ktkapp.dto.role.kioskClientRep;
 import com.ktk.ktkapp.dto.role.kioskCustodian;
-import com.ktk.ktkapp.dto.role.ktkEmployee;
+import com.ktk.ktkapp.dto.role.ktkUser;
 import com.ktk.ktkapp.model.role.kioskClientRepModel;
 import com.ktk.ktkapp.model.role.kioskCustodianModel;
-import com.ktk.ktkapp.model.role.ktkEmployeeModel;
+import com.ktk.ktkapp.model.role.ktkUserModel;
 import com.ktk.ktkapp.model.role.roleModel;
 import com.ktk.ktkapp.dto.user.userCreate;
 import com.ktk.ktkapp.model.user.userModel;
@@ -26,11 +26,11 @@ public class roleService {
     private final roleRepository roleRepo;
     private final kioskClientRepRepository kioskClientRepRepo;
     private final kioskClientRepo kioskClientRepo;
-    private final ktkEmployeeRepository ktkEmployeeRepo;
+    private final ktkUserRepository ktkEmployeeRepo;
     private final kioskCustodianRepository kioskCustodianRepo;
 
     public roleService(userRepository userRepo,
-                       roleRepository roleRepo, kioskClientRepRepository kioskClientRepRepo, ktkEmployeeRepository ktkEmployeeRepo, kioskCustodianRepository kioskCustodianRepo, kioskClientRepo kioskClientRepo) {
+                       roleRepository roleRepo, kioskClientRepRepository kioskClientRepRepo, ktkUserRepository ktkEmployeeRepo, kioskCustodianRepository kioskCustodianRepo, kioskClientRepo kioskClientRepo) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.kioskClientRepRepo = kioskClientRepRepo;
@@ -70,23 +70,33 @@ public class roleService {
     }
 
     public void createRoleSpecificProfiles(userModel user, userCreate createDTO) {
-        Long userId = user.getUserId();cd
+        Long userId = user.getUserId();
 
-        if (createDTO.getRoles().contains("KIOSK_CLIENT") && createDTO.getKioskClientRepProfile() != null) {
+        if (createDTO.getRoles().contains("KIOSK_CLIENT_REP") && createDTO.getKioskClientRepProfile() != null) {
             kioskClientRep dto = createDTO.getKioskClientRepProfile();
 
             kioskClientRepModel clientRep = new kioskClientRepModel();
             clientRep.setUser(user);
             clientRep.setJobTitle(dto.getJobTitle());
+
+            if (dto.getClientId() != null) {
+                kioskClientModel clientOrg = kioskClientRepo.findById(dto.getClientId())
+                        .orElseThrow(() -> new IllegalArgumentException("Kiosk Client Organization not found with ID: " + dto.getClientId()));
+                clientRep.setClient(clientOrg);
+            } else {
+
+                throw new IllegalArgumentException("Kiosk client organization ID is required for a KIOSK_CLIENT_REP profile.");
+            }
+
             kioskClientRepRepo.save(clientRep);
 
            
         }
 
         if (createDTO.getRoles().contains("KTK_USER") && createDTO.getKtkUser() != null) {
-            ktkEmployee dto = createDTO.getKtkUser();
+            ktkUser dto = createDTO.getKtkUser();
 
-            ktkEmployeeModel emp = new ktkEmployeeModel();
+            ktkUserModel emp = new ktkUserModel();
             emp.setUser(user);
             emp.setDepartment(dto.getDepartment());
 
@@ -99,9 +109,13 @@ public class roleService {
             kioskCustodianModel custodian = new kioskCustodianModel();
             custodian.setUser(user);
 
-            // Set client as kiosk_client (organization)
-            kioskClientModel client = kioskClientRepo.findById(dto.getClientId()).orElse(null);
-            custodian.setClient(client.getClientRep());
+            if (dto.getClientId() != null) {
+                kioskClientModel clientOrg = kioskClientRepo.findById(dto.getClientId())
+                        .orElseThrow(() -> new IllegalArgumentException("Kiosk Client Organization not found with ID: " + dto.getClientId()));
+                custodian.setClient(clientOrg);
+            } else {
+                throw new IllegalArgumentException("Client ID is required for KIOSK_CUSTODIAN profile.");
+            }
 
             kioskCustodianRepo.save(custodian);
         }

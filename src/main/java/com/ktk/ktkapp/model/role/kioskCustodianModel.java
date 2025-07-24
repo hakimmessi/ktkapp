@@ -1,5 +1,6 @@
 package com.ktk.ktkapp.model.role;
 
+import com.ktk.ktkapp.model.kiosk.kioskClientModel;
 import com.ktk.ktkapp.model.user.userModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,5 +24,5 @@ public class kioskCustodianModel {
     /** many custodians can relate to the same kiosk_client */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
-    private kioskClientRepModel client;
+    private kioskClientModel client;
 }

@@ -1,6 +1,6 @@
 package com.ktk.ktkapp.model.role;
 
-import com.ktk.ktkapp.model.kiosk.kioskModel;
+import com.ktk.ktkapp.model.kiosk.kioskClientModel;
 import com.ktk.ktkapp.model.user.userModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +26,7 @@ public class kioskClientRepModel {
     /** many-to-one with kiosk_client.client_id */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
-    private kioskModel client;
+    private kioskClientModel client;
 
     @Column(name = "job_title", length = 100)
     private String jobTitle;

@@ -15,11 +15,10 @@ public class secuConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Typically disable CSRF for stateless REST APIs
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        // Allow unauthenticated access to the signup and login endpoints
-                        .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
-                        // All other requests require authentication
+                        // Allow unauthenticated access to the endpoint i need to test
+                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/kiosk-clients/create", "api/kiosk-clients/{clientId}/link-rep/{clientRepId}").permitAll()
                         .anyRequest().authenticated()
                 );
 
