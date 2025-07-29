@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -23,6 +26,7 @@ public class kioskComponentModel {
     @Column(name = "component_id")
     private Integer componentId;
 
+    @CreationTimestamp
     @Column(name = "installed_at")
     private LocalDateTime installedAt;
 

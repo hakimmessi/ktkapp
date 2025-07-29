@@ -1,6 +1,6 @@
 package com.ktk.ktkapp.controller.kiosk;
 
-import com.ktk.ktkapp.dto.responses.kiosk.kioskClientResponse;
+import com.ktk.ktkapp.dto.kiosk.responses.kioskClientResponse;
 import com.ktk.ktkapp.model.kiosk.kioskClientModel;
 import com.ktk.ktkapp.service.kiosk.kioskClientService;
 import org.springframework.beans.factory.annotation.Autowired;

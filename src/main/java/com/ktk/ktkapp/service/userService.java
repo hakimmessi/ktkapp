@@ -1,8 +1,8 @@
 package com.ktk.ktkapp.service;
 
 import com.ktk.ktkapp.dto.user.*;
-import com.ktk.ktkapp.dto.responses.users.userLoginResponse;
-import com.ktk.ktkapp.dto.responses.users.userResponse;
+import com.ktk.ktkapp.dto.user.responses.userLoginResponse;
+import com.ktk.ktkapp.dto.user.responses.userResponse;
 import com.ktk.ktkapp.model.role.roleModel;
 import com.ktk.ktkapp.model.user.userModel;
 import com.ktk.ktkapp.repos.user.roleRepository;
@@ -66,7 +66,7 @@ public class userService {
                     .map(roleName -> roleRepo.findByName(roleName) // Use the injected roleRepo instance
                             .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName)))
                     .collect(Collectors.toSet());
-            newUser.setRoles(assignedRoles.stream().toList()); // Set the roles on the new userModel
+            newUser.setRoles(assignedRoles.stream().toList());
         } else {
 
             throw new IllegalArgumentException("User must be assigned at least one role. Select one");
@@ -115,7 +115,7 @@ public class userService {
         // Get user roles
         List<String> roles = roleServ.getUserRoles(user.getUserId());
 
-        // Generate JWT token
+        // Generate JWT token, DO NOT FORGET TO IMPLEMENT THIS!!!!!!
         //String token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), roles);
 
         // Create login response

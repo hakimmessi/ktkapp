@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.dto.component;
+package com.ktk.ktkapp.dto.component.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,11 +10,12 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class component {
+public class componentResponse {
     private Integer componentId;
     private String name;
     private Integer supplierId;
     private String serialNumber;
     private String model;
     private BigDecimal cost;
+    private LocalDateTime createdAt;
 }

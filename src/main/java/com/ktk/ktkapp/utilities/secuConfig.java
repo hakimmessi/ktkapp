@@ -2,6 +2,7 @@ package com.ktk.ktkapp.utilities;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,14 +16,30 @@ public class secuConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) 
+
+                
                 .authorizeHttpRequests(authorize -> authorize
-                        // Allow unauthenticated access to the endpoint i need to test
-                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/kiosk-clients/create", "api/kiosk-clients/{clientId}/link-rep/{clientRepId} ",
-                                "/api/kiosk-locations/add", "/api/altron-hubs/create", "/api/kiosk-types/**", "/api/kiosk-statuses/**").permitAll()
+                        
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        
+                
+                        .requestMatchers(
+                            "/api/auth/signup",
+                            "/api/auth/login",
+                            "/api/kiosk-clients/create",
+                            "/api/kiosk-clients/{clientId}/link-rep/{clientRepId}",
+                            "/api/kiosk-locations/add",
+                            "/api/altron-hubs/create",
+                            "/api/kiosk-types/**",
+                            "/api/kiosk-statuses/**",
+                            "/api/kiosks/**",
+                            "/api/suppliers/**",
+                            "/api/components/**",
+                            "/api/kiosk-locations/**" 
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
-
 
         return http.build();
     }

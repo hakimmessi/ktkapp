@@ -1,7 +1,7 @@
 package com.ktk.ktkapp.controller.kiosk;
 
 import com.ktk.ktkapp.dto.kiosk.kioskLocation;
-import com.ktk.ktkapp.dto.responses.kiosk.kioskLocationResponse;
+import com.ktk.ktkapp.dto.kiosk.responses.kioskLocationResponse;
 import com.ktk.ktkapp.service.kiosk.kioskLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,5 +41,13 @@ public class kioskLocationController {
         kioskLocation locationDetails = new kioskLocation(); // This should be populated with actual data}
         kioskLocationResponse updatedLocation = locationService.updateLocation(id, locationDetails);
         return ResponseEntity.ok(updatedLocation);
+    }
+
+    // method to get kioskLocation by name
+    @GetMapping("/name/{name}")
+    public ResponseEntity<kioskLocationResponse> getKioskLocationByName(@PathVariable String name) {
+        return locationService.getLocationByName(name)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,9 +30,11 @@ public class supplierModel {
     @Column(name = "contact_phone", length = 20)
     private String contactPhone;
 
+    @CreationTimestamp
     @Column(name = "country", length = 100)
     private String country;
 
+    @UpdateTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

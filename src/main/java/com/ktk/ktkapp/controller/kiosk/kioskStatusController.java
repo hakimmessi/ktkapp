@@ -16,7 +16,7 @@ public class kioskStatusController {
     @Autowired
     private kioskStatusService kioskStatusService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<kioskStatus> createKioskStatus(@RequestBody kioskStatus kioskStatusDto) {
         kioskStatus createdStatus = kioskStatusService.createKioskStatus(kioskStatusDto);
         return new ResponseEntity<>(createdStatus, HttpStatus.CREATED);

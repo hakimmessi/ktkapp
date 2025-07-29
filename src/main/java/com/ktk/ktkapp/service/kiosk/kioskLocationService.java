@@ -1,7 +1,7 @@
 package com.ktk.ktkapp.service.kiosk;
 
 import com.ktk.ktkapp.dto.kiosk.kioskLocation;
-import com.ktk.ktkapp.dto.responses.kiosk.kioskLocationResponse;
+import com.ktk.ktkapp.dto.kiosk.responses.kioskLocationResponse;
 import com.ktk.ktkapp.model.kiosk.kioskLocationModel;
 import com.ktk.ktkapp.repos.kiosk.kioskLocationRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -52,6 +52,10 @@ public class kioskLocationService {
             throw new EntityNotFoundException("Location not found with id: " + id);
         }
         locationRepository.deleteById(id);
+    }
+
+    public Optional<kioskLocationResponse> getLocationByName(String name) {
+        return locationRepository.findByLocationName(name).map(this::toResponseDto);
     }
 
     private kioskLocationResponse toResponseDto(kioskLocationModel model) {

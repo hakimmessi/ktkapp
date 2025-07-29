@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.dto.responses.technician;
+package com.ktk.ktkapp.dto.technician.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -16,7 +16,7 @@ public class kioskTypeController {
     @Autowired
     private kioskTypeService kioskTypeService;
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public ResponseEntity<kioskType> createKioskType(@RequestBody kioskType kioskTypeDto) {
         kioskType createdType = kioskTypeService.createKioskType(kioskTypeDto);
         return new ResponseEntity<>(createdType, HttpStatus.CREATED);

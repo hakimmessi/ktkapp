@@ -16,6 +16,4 @@ public class kioskClient {
     private LocalDate contractStartDate;
     private LocalDate contractEndDate;
     private Boolean isActive;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

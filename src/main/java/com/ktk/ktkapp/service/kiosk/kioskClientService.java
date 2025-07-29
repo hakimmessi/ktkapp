@@ -7,7 +7,7 @@ import com.ktk.ktkapp.repos.user.kioskClientRepRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ktk.ktkapp.dto.responses.kiosk.kioskClientResponse;
+import com.ktk.ktkapp.dto.kiosk.responses.kioskClientResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,9 +49,22 @@ public class kioskClientService {
 
 
     public kioskClientResponse save(kioskClientModel client) {
-        kioskClientModel savedClient = repo.save(client);
-        return mapToResponseDTO(savedClient);
+    Optional<kioskClientModel> existing = repo.findDuplicate(
+            client.getClientName(),
+            client.getCity(),
+            client.getProvince(),
+            client.getContractStartDate(),
+            client.getContractEndDate(),
+            client.getAddress()
+    );
+
+    if (existing.isPresent()) {
+        throw new IllegalArgumentException("Client with the same details already exists.");
     }
+
+    kioskClientModel savedClient = repo.save(client);
+    return mapToResponseDTO(savedClient);
+}
 
     private kioskClientResponse mapToResponseDTO(kioskClientModel client) {
         kioskClientResponse data_object = new kioskClientResponse();

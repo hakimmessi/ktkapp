@@ -5,14 +5,15 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.3</version>
+		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ktk</groupId>
 	<artifactId>ktkapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ktkapp</name>
-	<description>Proof of concept  project for Kinektek kiosk system. </description>
+	<description>Proof of concept project for Kinektek kiosk system.</description>
+	<!-- It's good practice to fill out the project metadata -->
 	<url/>
 	<licenses>
 		<license/>
@@ -86,14 +87,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

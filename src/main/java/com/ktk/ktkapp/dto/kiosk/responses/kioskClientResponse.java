@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.dto.responses.kiosk;
+package com.ktk.ktkapp.dto.kiosk.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

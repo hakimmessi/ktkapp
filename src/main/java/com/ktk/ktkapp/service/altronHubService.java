@@ -1,6 +1,6 @@
 package com.ktk.ktkapp.service;
 
-import com.ktk.ktkapp.dto.responses.technician.altronHubResponse;
+import com.ktk.ktkapp.dto.technician.responses.altronHubResponse;
 import com.ktk.ktkapp.dto.technician.altronHub;
 import com.ktk.ktkapp.model.technician.altronHubModel;
 import com.ktk.ktkapp.repos.technician.altronHubRepo;

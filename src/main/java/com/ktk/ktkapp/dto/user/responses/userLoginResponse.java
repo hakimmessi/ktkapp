@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.dto.responses.users;
+package com.ktk.ktkapp.dto.user.responses;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
@@ -18,7 +18,8 @@ public class userLoginResponse {
     private String firstName;
     private String surname;
     private List<String> roles;
-  //  private String accessToken; // JWT token
+  //  private String accessToken; // JWT token, TO BE ADDED
+    //private String refreshToken; // Refresh token, TO BE ADDED
     //private String tokenType = "Bearer";
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")

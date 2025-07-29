@@ -1,6 +1,6 @@
 package com.ktk.ktkapp.controller;
 
-import com.ktk.ktkapp.dto.responses.technician.altronHubResponse;
+import com.ktk.ktkapp.dto.technician.responses.altronHubResponse;
 import com.ktk.ktkapp.dto.technician.altronHub;
 import com.ktk.ktkapp.service.altronHubService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.dto.responses.users;
+package com.ktk.ktkapp.dto.user.responses;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;

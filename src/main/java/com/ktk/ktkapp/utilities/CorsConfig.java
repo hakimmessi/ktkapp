@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.utilities;
+package com.ktk.ktkapp.utilities; // Consider moving this to 'config' package if it's not already
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +14,16 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("https://ad983481ed48.ngrok-free.app", "http://localhost:8081", "http://0.0.0.0:8081")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedOrigins(
+                            "https://77783e31271c.ngrok-free.app", 
+                            "http://localhost:8081",
+                            "http://localhost:53063",
+                            "http://localhost:60970/",
+                            "http://0.0.0.0:8081",
+                            "http://127.0.0.1:8081"
+                            
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("*")
                         .allowCredentials(true)
                         .maxAge(3600);

@@ -1,7 +1,7 @@
 package com.ktk.ktkapp.controller;
 
-import com.ktk.ktkapp.dto.responses.users.userLoginResponse;
-import com.ktk.ktkapp.dto.responses.users.userResponse;
+import com.ktk.ktkapp.dto.user.responses.userLoginResponse;
+import com.ktk.ktkapp.dto.user.responses.userResponse;
 import com.ktk.ktkapp.service.userService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;

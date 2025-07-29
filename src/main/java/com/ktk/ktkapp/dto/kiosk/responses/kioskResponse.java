@@ -1,8 +1,8 @@
-package com.ktk.ktkapp.dto.kiosk;
+package com.ktk.ktkapp.dto.kiosk.responses;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class kiosk {
+public class kioskResponse {
     private Integer kioskId;
     private String terminalId;
     private String assetNumber;
@@ -22,4 +22,6 @@ public class kiosk {
     private Integer clientId;
     private Integer custodianId;
     private Integer locationId;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 }
