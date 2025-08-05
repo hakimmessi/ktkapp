@@ -1,5 +1,6 @@
 package com.ktk.ktkapp.model.kiosk;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ktk.ktkapp.model.role.kioskClientRepModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,6 +22,7 @@ public class kioskClientModel {
     @Column(name = "client_id")
     private Long clientId;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_rep_id", unique = true)
     private kioskClientRepModel clientRep;

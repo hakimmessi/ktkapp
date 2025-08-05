@@ -1,12 +1,11 @@
-package com.ktk.ktkapp.dto.user;
+package com.ktk.ktkapp.dto.user.request;
 
-
-import com.ktk.ktkapp.dto.role.clientRep.response.kioskClientRepResponse;
-import com.ktk.ktkapp.dto.role.custodian.response.kioskCustodianResponse;
-import com.ktk.ktkapp.dto.role.ktkEmployee.response.ktkUserResponse;
+import com.ktk.ktkapp.dto.role.clientRep.request.kioskClientRepRequest;
+import com.ktk.ktkapp.dto.role.custodian.request.kioskCustodianRequest;
+import com.ktk.ktkapp.dto.role.ktkEmployee.request.ktkUserRequest;
 import jakarta.validation.constraints.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
 
 import java.util.List;
 
@@ -17,7 +16,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class userCreate {
+@Getter
+@Setter
+public class userRegistrationRequest {
+
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     @Size(max = 100, message = "Email must not exceed 100 characters")
@@ -38,9 +40,11 @@ public class userCreate {
     private String phone;
 
     @NotEmpty(message = "At least one role must be assigned")
-    private List<String> roles; // e.g. ["KTK_USER", "KIOSK_CLIENT"]
+    private List<String> roles;
 
-    private kioskClientRepResponse kioskClientRepResponseProfile;
-    private ktkUserResponse ktkUserResponse;
-    private kioskCustodianResponse kioskCustodianResponseProfile;
+    private kioskClientRepRequest kioskClientRepProfile;
+    private ktkUserRequest ktkUserProfile;
+    private kioskCustodianRequest kioskCustodianProfile;
+
+
 }

@@ -1,10 +1,11 @@
 package com.ktk.ktkapp.controller.kiosk;
 
-import com.ktk.ktkapp.dto.kiosk.kioskStatus;
+import com.ktk.ktkapp.dto.kiosk.requests.kioskStatusRequest;
+import com.ktk.ktkapp.dto.kiosk.responses.kioskStatusResponse;
 import com.ktk.ktkapp.service.kiosk.kioskStatusService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,33 +17,32 @@ public class kioskStatusController {
     @Autowired
     private kioskStatusService kioskStatusService;
 
-    @PostMapping("/add")
-    public ResponseEntity<kioskStatus> createKioskStatus(@RequestBody kioskStatus kioskStatusDto) {
-        kioskStatus createdStatus = kioskStatusService.createKioskStatus(kioskStatusDto);
-        return new ResponseEntity<>(createdStatus, HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<kioskStatusResponse> create(@Valid @RequestBody kioskStatusRequest request) {
+        kioskStatusResponse response = kioskStatusService.createKioskStatus(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<kioskStatus>> getAllKioskStatuses() {
-        List<kioskStatus> statuses = kioskStatusService.getAllKioskStatuses();
-        return ResponseEntity.ok(statuses);
+    public ResponseEntity<List<kioskStatusResponse>> getAll() {
+        return ResponseEntity.ok(kioskStatusService.getAllKioskStatuses());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<kioskStatus> getKioskStatusById(@PathVariable Integer id) {
+    public ResponseEntity<kioskStatusResponse> getById(@PathVariable Integer id) {
         return kioskStatusService.getKioskStatusById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<kioskStatus> updateKioskStatus(@PathVariable Integer id, @RequestBody kioskStatus kioskStatusDetails) {
-        kioskStatus updatedStatus = kioskStatusService.updateKioskStatus(id, kioskStatusDetails);
-        return ResponseEntity.ok(updatedStatus);
+    public ResponseEntity<kioskStatusResponse> update(@PathVariable Integer id,
+                                                      @Valid @RequestBody kioskStatusRequest request) {
+        return ResponseEntity.ok(kioskStatusService.updateKioskStatus(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteKioskStatus(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         kioskStatusService.deleteKioskStatus(id);
         return ResponseEntity.noContent().build();
     }

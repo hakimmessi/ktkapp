@@ -9,34 +9,44 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class secuConfig {
+
+    private final CorsFilter corsFilter;
+
+    public secuConfig(CorsFilter corsFilter) {
+        this.corsFilter = corsFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) 
+                .csrf(AbstractHttpConfigurer::disable)
 
-                
+                .cors(AbstractHttpConfigurer::disable)
+
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .authorizeHttpRequests(authorize -> authorize
-                        
+
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        
-                
+
                         .requestMatchers(
-                            "/api/auth/signup",
-                            "/api/auth/login",
-                            "/api/kiosk-clients/create",
-                            "/api/kiosk-clients/{clientId}/link-rep/{clientRepId}",
-                            "/api/kiosk-locations/add",
-                            "/api/altron-hubs/create",
-                            "/api/kiosk-types/**",
-                            "/api/kiosk-statuses/**",
-                            "/api/kiosks/**",
-                            "/api/suppliers/**",
-                            "/api/components/**",
-                            "/api/kiosk-locations/**" 
+                                "/api/auth/signup",
+                                "/api/auth/login",
+                                "/api/kiosk-clients/**",
+                                "/api/kiosk-locations/add",
+                                "/api/altron-hubs/create",
+                                "/api/kiosk-types/**",
+                                "/api/kiosk-statuses/**",
+                                "/api/kiosks/**",
+                                "/api/suppliers/**",
+                                "/api/components/**",
+                                "/api/kiosk-locations/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
@@ -44,15 +54,14 @@ public class secuConfig {
         return http.build();
     }
 
-    // Provide the PasswordEncoder that matches passwordUtil's Argon2 configuration
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new Argon2PasswordEncoder(
-                16,         // saltLength (bytes) - common default
-                32,         // hashLength (bytes) - common default
-                1,          // parallelism (lanes) - matches passwordUtil
-                64 * 1024,  // memory (KB) - matches passwordUtil (65536 bytes = 64KB)
-                2           // iterations (cost) - matches  passwordUtil
+                16,
+                32,
+                1,
+                64 * 1024,
+                2
         );
     }
 }

@@ -1,20 +1,22 @@
 package com.ktk.ktkapp.service;
 
-import com.ktk.ktkapp.dto.role.kioskClientRep;
-import com.ktk.ktkapp.dto.role.kioskCustodian;
-import com.ktk.ktkapp.dto.role.ktkUser;
+import com.ktk.ktkapp.dto.role.clientRep.request.kioskClientRepRequest;
+import com.ktk.ktkapp.dto.role.custodian.request.kioskCustodianRequest;
+import com.ktk.ktkapp.dto.role.ktkEmployee.request.ktkUserRequest;
+import com.ktk.ktkapp.dto.user.request.userRegistrationRequest;
 import com.ktk.ktkapp.model.role.kioskClientRepModel;
 import com.ktk.ktkapp.model.role.kioskCustodianModel;
 import com.ktk.ktkapp.model.role.ktkUserModel;
 import com.ktk.ktkapp.model.role.roleModel;
-import com.ktk.ktkapp.dto.user.userCreate;
 import com.ktk.ktkapp.model.user.userModel;
 import com.ktk.ktkapp.model.kiosk.kioskClientModel;
 import com.ktk.ktkapp.repos.kiosk.kioskClientRepo;
 import com.ktk.ktkapp.repos.user.*;
+import com.ktk.ktkapp.dto.role.roleMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,37 +30,43 @@ public class roleService {
     private final kioskClientRepo kioskClientRepo;
     private final ktkUserRepository ktkEmployeeRepo;
     private final kioskCustodianRepository kioskCustodianRepo;
+    private final roleMapper roleMaps;
 
     public roleService(userRepository userRepo,
-                       roleRepository roleRepo, kioskClientRepRepository kioskClientRepRepo, ktkUserRepository ktkEmployeeRepo, kioskCustodianRepository kioskCustodianRepo, kioskClientRepo kioskClientRepo) {
+                       roleRepository roleRepo, kioskClientRepRepository kioskClientRepRepo, ktkUserRepository ktkEmployeeRepo, kioskCustodianRepository kioskCustodianRepo, kioskClientRepo kioskClientRepo, roleMapper roleMaps) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.kioskClientRepRepo = kioskClientRepRepo;
         this.kioskClientRepo = kioskClientRepo;
         this.ktkEmployeeRepo = ktkEmployeeRepo;
         this.kioskCustodianRepo = kioskCustodianRepo;
+        this.roleMaps = roleMaps;
     }
 
     /**
      * Assigns roles to a user.
-     * Assumes rolesString is a comma-separated string of role names.
+     * This method is now much cleaner and more focused on its single responsibility.
+     * @param userId The ID of the user to assign roles to.
+     * @param roleNames A list of role names to assign.
      */
-    public void assignRolesToUser(Long userId, String rolesString) {
+    public void assignRolesToUser(Long userId, List<String> roleNames) {
         userModel user = userRepo.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
-        Set<roleModel> roles = Arrays.stream(rolesString.split(","))
+        Set<roleModel> roles = roleNames.stream()
                 .map(String::trim)
                 .map(roleName -> roleRepo.findByName(roleName)
                         .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName)))
                 .collect(Collectors.toSet());
 
-        user.setRoles(roles.stream().collect(Collectors.toList()));
+        user.setRoles(roles.stream().toList());
         userRepo.save(user);
     }
 
     /**
      * Retrieves the roles associated with a user.
+     * @param userId The ID of the user.
+     * @return A list of role names for the specified user.
      */
     public List<String> getUserRoles(Long userId) {
         userModel user = userRepo.findById(userId)
@@ -69,55 +77,64 @@ public class roleService {
                 .collect(Collectors.toList());
     }
 
-    public void createRoleSpecificProfiles(userModel user, userCreate createDTO) {
-        Long userId = user.getUserId();
 
+    @Transactional
+    public void createRoleSpecificProfiles(userModel user, userRegistrationRequest createDTO) {
         if (createDTO.getRoles().contains("KIOSK_CLIENT_REP") && createDTO.getKioskClientRepProfile() != null) {
-            kioskClientRep dto = createDTO.getKioskClientRepProfile();
-
-            kioskClientRepModel clientRep = new kioskClientRepModel();
-            clientRep.setUser(user);
-            clientRep.setJobTitle(dto.getJobTitle());
-
-            if (dto.getClientId() != null) {
-                kioskClientModel clientOrg = kioskClientRepo.findById(dto.getClientId())
-                        .orElseThrow(() -> new IllegalArgumentException("Kiosk Client Organization not found with ID: " + dto.getClientId()));
-                clientRep.setClient(clientOrg);
-            } else {
-
-                throw new IllegalArgumentException("Kiosk client organization ID is required for a KIOSK_CLIENT_REP profile.");
-            }
-
-            kioskClientRepRepo.save(clientRep);
-
-           
+            createKioskClientRepProfile(user, createDTO.getKioskClientRepProfile());
         }
 
-        if (createDTO.getRoles().contains("KTK_USER") && createDTO.getKtkUser() != null) {
-            ktkUser dto = createDTO.getKtkUser();
-
-            ktkUserModel emp = new ktkUserModel();
-            emp.setUser(user);
-            emp.setDepartment(dto.getDepartment());
-
-            ktkEmployeeRepo.save(emp);
+        if (createDTO.getRoles().contains("KTK_USER") && createDTO.getKtkUserProfile() != null) {
+            createKtkUserProfile(user, createDTO.getKtkUserProfile());
         }
 
         if (createDTO.getRoles().contains("KIOSK_CUSTODIAN") && createDTO.getKioskCustodianProfile() != null) {
-            kioskCustodian dto = createDTO.getKioskCustodianProfile();
-
-            kioskCustodianModel custodian = new kioskCustodianModel();
-            custodian.setUser(user);
-
-            if (dto.getClientId() != null) {
-                kioskClientModel clientOrg = kioskClientRepo.findById(dto.getClientId())
-                        .orElseThrow(() -> new IllegalArgumentException("Kiosk Client Organization not found with ID: " + dto.getClientId()));
-                custodian.setClient(clientOrg);
-            } else {
-                throw new IllegalArgumentException("Client ID is required for KIOSK_CUSTODIAN profile.");
-            }
-
-            kioskCustodianRepo.save(custodian);
+            createKioskCustodianProfile(user, createDTO.getKioskCustodianProfile());
         }
     }
+
+    /**
+     * Creates a Kiosk Client Representative profile.
+     * @param user The user to link the profile to.
+     * @param dto The DTO with the profile details.
+     */
+    private void createKioskClientRepProfile(userModel user, kioskClientRepRequest dto) {
+        kioskClientRepModel clientRep = roleMaps.toKioskClientRepModel(dto);
+        clientRep.setUser(user);
+
+        kioskClientModel clientOrg = kioskClientRepo.findById(dto.getClientId())
+                .orElseThrow(() -> new IllegalArgumentException("Kiosk Client Organization not found with ID: " + dto.getClientId()));
+        clientRep.setClient(clientOrg);
+
+        kioskClientRepRepo.save(clientRep);
+    }
+
+    /**
+     * Creates a Kinektek User profile.
+     * @param user The user to link the profile to.
+     * @param dto The DTO with the profile details.
+     */
+    private void createKtkUserProfile(userModel user, ktkUserRequest dto) {
+        ktkUserModel ktkUser = roleMaps.toKtkUserModel(dto);
+        ktkUser.setUser(user);
+        ktkEmployeeRepo.save(ktkUser);
+    }
+
+    /**
+     * Creates a Kiosk Custodian profile.
+     * @param user The user to link the profile to.
+     * @param dto The DTO with the profile details.
+     */
+    private void createKioskCustodianProfile(userModel user, kioskCustodianRequest dto) {
+        kioskCustodianModel custodian = roleMaps.toKioskCustodianModel(dto);
+        custodian.setUser(user);
+
+        kioskClientModel clientOrg = kioskClientRepo.findById(dto.getClientId())
+                .orElseThrow(() -> new IllegalArgumentException("Kiosk Client Organization not found with ID: " + dto.getClientId()));
+        custodian.setClient(clientOrg);
+
+        kioskCustodianRepo.save(custodian);
+    }
+
+
 }

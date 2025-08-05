@@ -1,6 +1,8 @@
 package com.ktk.ktkapp.service.kiosk;
 
-import com.ktk.ktkapp.dto.kiosk.kioskStatus;
+import com.ktk.ktkapp.dto.kiosk.mapper.kioskStatusMapper;
+import com.ktk.ktkapp.dto.kiosk.requests.kioskStatusRequest;
+import com.ktk.ktkapp.dto.kiosk.responses.kioskStatusResponse;
 import com.ktk.ktkapp.model.kiosk.kioskStatusModel;
 import com.ktk.ktkapp.repos.kiosk.kioskStatusRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,32 +16,35 @@ import java.util.stream.Collectors;
 @Service
 public class kioskStatusService {
 
+
+
     @Autowired
     private kioskStatusRepo kioskStatusRepo;
 
-    public kioskStatus createKioskStatus(kioskStatus kioskStatusDto) {
-        kioskStatusModel model = toModel(kioskStatusDto);
-        kioskStatusModel savedModel = kioskStatusRepo.save(model);
-        return toDto(savedModel);
+    public kioskStatusResponse createKioskStatus(kioskStatusRequest request) {
+        kioskStatusModel model = kioskStatusMapper.toModel(request);
+        kioskStatusModel saved = kioskStatusRepo.save(model);
+        return kioskStatusMapper.toResponse(saved);
     }
 
-    public List<kioskStatus> getAllKioskStatuses() {
+    public List<kioskStatusResponse> getAllKioskStatuses() {
         return kioskStatusRepo.findAll().stream()
-                .map(this::toDto)
+                .map(kioskStatusMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public Optional<kioskStatus> getKioskStatusById(Integer id) {
-        return kioskStatusRepo.findById(id).map(this::toDto);
+    public Optional<kioskStatusResponse> getKioskStatusById(Integer id) {
+        return kioskStatusRepo.findById(id)
+                .map(kioskStatusMapper::toResponse);
     }
 
-    public kioskStatus updateKioskStatus(Integer id, kioskStatus kioskStatusDetails) {
-        kioskStatusModel existingStatus = kioskStatusRepo.findById(id)
+    public kioskStatusResponse updateKioskStatus(Integer id, kioskStatusRequest request) {
+        kioskStatusModel model = kioskStatusRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("KioskStatus not found with id: " + id));
 
-        existingStatus.setKioskStatusName(kioskStatusDetails.getKioskStatusName());
-        kioskStatusModel updatedStatus = kioskStatusRepo.save(existingStatus);
-        return toDto(updatedStatus);
+        model.setKioskStatusName(request.getKioskStatusName());
+        kioskStatusModel updated = kioskStatusRepo.save(model);
+        return kioskStatusMapper.toResponse(updated);
     }
 
     public void deleteKioskStatus(Integer id) {
@@ -47,13 +52,5 @@ public class kioskStatusService {
             throw new EntityNotFoundException("KioskStatus not found with id: " + id);
         }
         kioskStatusRepo.deleteById(id);
-    }
-
-    private kioskStatus toDto(kioskStatusModel model) {
-        return new kioskStatus(model.getKioskStatusId(), model.getKioskStatusName());
-    }
-
-    private kioskStatusModel toModel(kioskStatus dto) {
-        return new kioskStatusModel(dto.getKioskStatusId(), dto.getKioskStatusName());
     }
 }

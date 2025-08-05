@@ -1,4 +1,4 @@
-package com.ktk.ktkapp.dto.role;
+package com.ktk.ktkapp.dto.role.custodian.response;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class kioskCustodian {
+public class kioskCustodianResponse {
+    private Long custodianId;
+    private Long userId;
     @NotNull(message = "Client ID is required for custodian")
     private Long clientId;
 }

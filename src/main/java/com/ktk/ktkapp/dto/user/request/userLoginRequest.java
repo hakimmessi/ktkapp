@@ -1,18 +1,14 @@
-package com.ktk.ktkapp.dto.user;
-
-
+package com.ktk.ktkapp.dto.user.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Data;
 
 /**
- * DTO for user authentication
- * Used for POST /auth/login
+ * DTO for user authentication request.
+ * Contains only the necessary fields for a login attempt.
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class userLogin {
+public class userLoginRequest {
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
